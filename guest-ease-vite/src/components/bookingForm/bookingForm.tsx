@@ -353,6 +353,7 @@
 // export default BookingForm;
 
 import React, { useState } from "react";
+import { useBooking } from "../../context/bookingContext";
 
 type BookingFormData = {
   checkIn: string;
@@ -374,6 +375,29 @@ const inputStyle: React.CSSProperties = {
 };
 
 const BookingForm: React.FC = () => {
+  const { bookRoom } = useBooking(); // 👈 use the context
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.checkIn || !formData.checkOut) {
+      alert("Please select both check-in and check-out dates.");
+      return;
+    }
+
+    const result = await bookRoom({
+      room_id: "room_101", // You can later make this dynamic
+      check_in: formData.checkIn,
+      check_out: formData.checkOut,
+      guests: formData.guests,
+    });
+
+    if (!result.success) {
+      alert(`❌ ${result.message}`);
+    } else {
+      alert(`✅ ${result.message}`);
+    }
+  };
+
   const [formData, setFormData] = useState<BookingFormData>({
     checkIn: "",
     checkOut: "",
@@ -386,22 +410,6 @@ const BookingForm: React.FC = () => {
       ...prev,
       [name]: name === "guests" ? Number(value) : value,
     }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.checkIn || !formData.checkOut) {
-      alert("Please select both check-in and check-out dates.");
-      return;
-    }
-    if (formData.guests < 1) {
-      alert("Number of guests must be at least 1.");
-      return;
-    }
-    console.log("Booking data:", formData);
-    alert(
-      `Booking confirmed!\nCheck-in: ${formData.checkIn}\nCheck-out: ${formData.checkOut}\nGuests: ${formData.guests}`
-    );
   };
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {

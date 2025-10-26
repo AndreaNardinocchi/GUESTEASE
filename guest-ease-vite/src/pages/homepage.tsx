@@ -1,73 +1,3 @@
-// import React from "react";
-// import { Container, Typography, Box } from "@mui/material";
-// import BookingForm from "../components/bookingForm/bookingForm";
-// import StickyBox from "../components/stickyComp/stickyComp";
-
-// const HomePage: React.FC = () => {
-//   return (
-//     <>
-//       <Container
-//         maxWidth="md"
-//         // sx={{ mt: 14 /* 64px nav + ~50px sticky box height */ }}
-//       >
-//         <Box textAlign="center" mb={5}>
-//           <Typography variant="h2" component="h1" gutterBottom>
-//             Welcome to GuestEase
-//           </Typography>
-
-//           <Typography variant="h5" color="textSecondary" paragraph>
-//             Your comfort is our priority. Nestled in a peaceful location, our
-//             guesthouse offers cozy rooms, friendly service, and a relaxing
-//             atmosphere.
-//           </Typography>
-//         </Box>
-//       </Container>
-//       {/* Sticky box below nav */}
-//       <StickyBox>
-//         <BookingForm />
-//       </StickyBox>
-
-//       {/* Push content down so it doesn't hide behind sticky elements */}
-//       <Container
-//         maxWidth="md"
-//         sx={{ mt: 14 /* 64px nav + ~50px sticky box height */ }}
-//       >
-//         <Box textAlign="center" mb={5}>
-//           {/* <Typography variant="h2" component="h1" gutterBottom>
-//             Welcome to GuestEase
-//           </Typography>
-//           <Typography variant="h5" color="textSecondary" paragraph>
-//             Your comfort is our priority. Nestled in a peaceful location, our
-//             guesthouse offers cozy rooms, friendly service, and a relaxing
-//             atmosphere.
-//           </Typography> */}
-//           <Typography variant="body1" paragraph>
-//             Whether you're traveling for business or pleasure, GuestEase ensures
-//             a pleasant stay with clean, well-equipped rooms, fast Wi-Fi, and
-//             complimentary breakfast. Choose from a range of room options and
-//             enjoy facilities designed for your convenience.
-//           </Typography>
-//         </Box>
-
-//         <Box mt={8}>
-//           <Typography variant="h4" gutterBottom>
-//             Why Choose GuestEase?
-//           </Typography>
-//           <ul style={{ fontSize: "1.1rem", lineHeight: 1.8 }}>
-//             <li>✔️ Comfortable and clean accommodations</li>
-//             <li>✔️ Fast and free Wi-Fi</li>
-//             <li>✔️ Central location with easy access</li>
-//             <li>✔️ Friendly and attentive staff</li>
-//             <li>✔️ Affordable rates with flexible booking</li>
-//           </ul>
-//         </Box>
-//       </Container>
-//     </>
-//   );
-// };
-
-// export default HomePage;
-
 import React from "react";
 import {
   Container,
@@ -101,9 +31,33 @@ const rooms = [
   {
     id: 3,
     name: "Room 103",
-    description: "Deluxe suite with king-sized bed and luxurious bathroom.",
+    description: "Deluxe suite with king‑sized bed and luxurious bathroom.",
     image:
       "https://images.unsplash.com/photo-1551918120-973ff7851f76?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 4,
+    name: "Room 104",
+    description:
+      "Family room with two double beds, smart TV and lots of space.",
+    image:
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 5,
+    name: "Room 105",
+    description:
+      "Executive corner room with dedicated work desk and city‑skyline view. iiiiiiiiiiiiiiii",
+    image:
+      "https://images.unsplash.com/photo-1551906993244-0a1a995fb?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 6,
+    name: "Room 106",
+    description:
+      "Penthouse suite with private terrace, lounge area and premium finishes.",
+    image:
+      "https://images.unsplash.com/photo-1541717854-c0717ffb4328?auto=format&fit=crop&w=800&q=80",
   },
 ];
 
@@ -167,6 +121,8 @@ const HomePage: React.FC = () => {
                     height: "100%",
                     display: "flex",
                     flexDirection: "column",
+                    maxWidth: 345, // or whatever fits your grid nicely
+                    width: "100%", // ensures it fills the grid column
                   }}
                 >
                   <CardMedia
