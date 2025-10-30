@@ -352,7 +352,185 @@
 
 // export default BookingForm;
 
+// import React, { useState } from "react";
+// import { useBooking } from "../../context/bookingContext";
+
+// type BookingFormData = {
+//   checkIn: string;
+//   checkOut: string;
+//   guests: number;
+// };
+
+// const inputStyle: React.CSSProperties = {
+//   padding: "0.75rem",
+//   fontSize: "1rem",
+//   borderRadius: "10px",
+//   border: "1px solid #ccc",
+//   boxShadow: "0 6px 20px rgba(0,0,0,0.25)",
+//   outline: "none",
+//   backgroundColor: "#fff",
+//   transition: "transform 0.2s, box-shadow 0.2s",
+//   boxSizing: "border-box",
+//   flex: 1, // stretch inside parent
+// };
+
+// const BookingForm: React.FC = () => {
+//   const { bookRoom } = useBooking(); // 👈 use the context
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     if (!formData.checkIn || !formData.checkOut) {
+//       alert("Please select both check-in and check-out dates.");
+//       return;
+//     }
+
+//     const result = await bookRoom({
+//       room_id: "room_101", // You can later make this dynamic
+//       check_in: formData.checkIn,
+//       check_out: formData.checkOut,
+//       guests: formData.guests,
+//     });
+
+//     if (!result.success) {
+//       alert(`❌ ${result.message}`);
+//     } else {
+//       alert(`✅ ${result.message}`);
+//     }
+//   };
+
+//   const [formData, setFormData] = useState<BookingFormData>({
+//     checkIn: "",
+//     checkOut: "",
+//     guests: 1,
+//   });
+
+//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     const { name, value } = e.target;
+//     setFormData((prev) => ({
+//       ...prev,
+//       [name]: name === "guests" ? Number(value) : value,
+//     }));
+//   };
+
+//   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+//     e.currentTarget.style.boxShadow = "0 10px 30px rgba(0,0,0,0.35)";
+//     e.currentTarget.style.transform = "translateY(-4px)";
+//   };
+
+//   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+//     e.currentTarget.style.boxShadow = "0 6px 20px rgba(0,0,0,0.25)";
+//     e.currentTarget.style.transform = "translateY(0)";
+//   };
+
+//   const handleButtonHover = (
+//     e: React.MouseEvent<HTMLButtonElement>,
+//     hover: boolean
+//   ) => {
+//     const btn = e.currentTarget;
+//     if (hover) {
+//       btn.style.backgroundColor = "#ffe6f0";
+//       btn.style.color = "#000";
+//       btn.style.boxShadow = "0 10px 30px rgba(0,0,0,0.35)";
+//       btn.style.transform = "translateY(-2px)";
+//     } else {
+//       btn.style.backgroundColor = "#8E4585";
+//       btn.style.color = "#fff";
+//       btn.style.boxShadow = "0 6px 20px rgba(0,0,0,0.25)";
+//       btn.style.transform = "translateY(0)";
+//     }
+//   };
+
+//   return (
+//     <form
+//       onSubmit={handleSubmit}
+//       style={{
+//         display: "flex",
+//         gap: "1rem",
+//         maxWidth: 800,
+//         margin: "2rem auto",
+//         alignItems: "stretch", // all children same height
+//       }}
+//     >
+//       {["checkIn", "checkOut"].map((field) => (
+//         <div
+//           key={field}
+//           style={{ display: "flex", flexDirection: "column", flex: 1 }}
+//         >
+//           <label style={{ marginBottom: "0.5rem", fontWeight: "bold" }}>
+//             {field === "checkIn" ? "Check-in" : "Check-out"}
+//           </label>
+//           <input
+//             type="date"
+//             name={field}
+//             value={formData[field as keyof BookingFormData] as string}
+//             onChange={handleChange}
+//             required
+//             style={inputStyle}
+//             onFocus={handleFocus}
+//             onBlur={handleBlur}
+//           />
+//         </div>
+//       ))}
+
+//       <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+//         <label style={{ marginBottom: "0.5rem", fontWeight: "bold" }}>
+//           Guests
+//         </label>
+//         <input
+//           type="number"
+//           name="guests"
+//           value={formData.guests}
+//           onChange={handleChange}
+//           min={1}
+//           style={inputStyle}
+//           onFocus={handleFocus}
+//           onBlur={handleBlur}
+//         />
+//       </div>
+
+//       <div
+//         style={{
+//           display: "flex",
+//           flexDirection: "column",
+//           justifyContent: "flex-end",
+//         }}
+//       >
+//         <button
+//           type="submit"
+//           style={{
+//             height: "3rem", // same as input
+//             padding: "0 1.5rem", // horizontal padding only
+//             fontSize: "1rem",
+//             fontWeight: 500,
+//             fontFamily: "inherit",
+//             borderRadius: "10px",
+//             border: "none",
+//             backgroundColor: "#8E4585",
+//             color: "#fff",
+//             boxShadow: "0 6px 20px rgba(0,0,0,0.25)",
+//             cursor: "pointer",
+//             display: "flex",
+//             alignItems: "center",
+//             justifyContent: "center",
+//             transition: "all 0.2s",
+//             boxSizing: "border-box",
+//           }}
+//           onMouseEnter={(e) => handleButtonHover(e, true)}
+//           onMouseLeave={(e) => handleButtonHover(e, false)}
+//         >
+//           Book Now
+//         </button>
+//       </div>
+//     </form>
+//   );
+// };
+
+// export default BookingForm;
+
+// LATEST VERSION
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // 👈 for navigation
+import { searchAvailableRooms } from "../../supabase/roomService"; // 👈 import
 import { useBooking } from "../../context/bookingContext";
 
 type BookingFormData = {
@@ -371,32 +549,12 @@ const inputStyle: React.CSSProperties = {
   backgroundColor: "#fff",
   transition: "transform 0.2s, box-shadow 0.2s",
   boxSizing: "border-box",
-  flex: 1, // stretch inside parent
+  flex: 1,
 };
 
 const BookingForm: React.FC = () => {
-  const { bookRoom } = useBooking(); // 👈 use the context
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.checkIn || !formData.checkOut) {
-      alert("Please select both check-in and check-out dates.");
-      return;
-    }
-
-    const result = await bookRoom({
-      room_id: "room_101", // You can later make this dynamic
-      check_in: formData.checkIn,
-      check_out: formData.checkOut,
-      guests: formData.guests,
-    });
-
-    if (!result.success) {
-      alert(`❌ ${result.message}`);
-    } else {
-      alert(`✅ ${result.message}`);
-    }
-  };
+  const navigate = useNavigate(); // 👈 use navigate to go to results page
+  const { bookRoom } = useBooking();
 
   const [formData, setFormData] = useState<BookingFormData>({
     checkIn: "",
@@ -440,6 +598,44 @@ const BookingForm: React.FC = () => {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.checkIn || !formData.checkOut) {
+      alert("Please select both check-in and check-out dates.");
+      return;
+    }
+
+    if (new Date(formData.checkOut) <= new Date(formData.checkIn)) {
+      alert("Check-out date must be after check-in date.");
+      return;
+    }
+
+    // 👇 Step 1: Search available rooms
+    const result = await searchAvailableRooms(
+      formData.checkIn,
+      formData.checkOut
+    );
+
+    if (!result.success) {
+      alert(`❌ ${result.message}`);
+      return;
+    }
+
+    if (result.rooms.length === 0) {
+      alert("No rooms available for these dates.");
+      return;
+    }
+
+    // 👇 Step 2: Go to search results page
+    navigate("/search-results", {
+      state: {
+        availableRooms: result.rooms,
+        searchParams: formData,
+      },
+    });
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -448,7 +644,7 @@ const BookingForm: React.FC = () => {
         gap: "1rem",
         maxWidth: 800,
         margin: "2rem auto",
-        alignItems: "stretch", // all children same height
+        alignItems: "stretch",
       }}
     >
       {["checkIn", "checkOut"].map((field) => (
@@ -498,8 +694,8 @@ const BookingForm: React.FC = () => {
         <button
           type="submit"
           style={{
-            height: "3rem", // same as input
-            padding: "0 1.5rem", // horizontal padding only
+            height: "3rem",
+            padding: "0 1.5rem",
             fontSize: "1rem",
             fontWeight: 500,
             fontFamily: "inherit",
@@ -518,7 +714,7 @@ const BookingForm: React.FC = () => {
           onMouseEnter={(e) => handleButtonHover(e, true)}
           onMouseLeave={(e) => handleButtonHover(e, false)}
         >
-          Book Now
+          Search Rooms
         </button>
       </div>
     </form>
