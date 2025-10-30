@@ -14,7 +14,7 @@ type Room = {
 
 const SearchResults: React.FC = () => {
   const location = useLocation();
-  const { searchAvailableRooms } = useBooking();
+  const { searchAvailableRooms, bookRoom } = useBooking();
 
   // Read state passed from BookingForm
   // Fallback to empty if no state exists
@@ -75,9 +75,34 @@ const SearchResults: React.FC = () => {
               €{room.price} / night
             </p>
           )}
-          <button
+          {/* <button
             className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
             onClick={() => alert(`Book room ${room.name}`)}
+          >
+            Book Now
+          </button> */}
+
+          <button
+            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+            onClick={async () => {
+              if (!checkIn || !checkOut) {
+                alert("Invalid dates.");
+                return;
+              }
+
+              const { success, message } = await bookRoom({
+                room_id: room.name,
+                check_in: checkIn,
+                check_out: checkOut,
+                guests: 1, // optionally let user select guests
+              });
+
+              if (success) {
+                alert(`Room ${room.name} booked successfully!`);
+              } else {
+                alert(`❌ Failed to book room: ${message}`);
+              }
+            }}
           >
             Book Now
           </button>
