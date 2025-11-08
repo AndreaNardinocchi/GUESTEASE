@@ -535,6 +535,20 @@ import {
 
 const RoomDetails: React.FC = () => {
   const { roomId } = useParams();
+
+  //   // Fetch movie data (including cast details) using React Query's useQuery hook
+  // const {
+  //   data: room, // The fetched movie data will be stored in 'movie'
+  //   error, // Error object if the query fails
+  //   isLoading, // Boolean flag indicating if the query is currently loading
+  //   isError, // Boolean flag indicating if there was an error during the query
+  // } = useQuery<MovieDetailsProps, Error>(
+  //   ["movie", id, lang], // Unique query key for caching and refetching
+  //   () =>
+  //     // Fetch the movie with cast information using the provided function
+  //     fetchMovieWithCast(id || "", lang)
+  // );
+
   const { searchAvailableRooms, loading, bookRoom } = useBooking();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -545,8 +559,38 @@ const RoomDetails: React.FC = () => {
   const [guests, setGuests] = useState<number>(1);
 
   // Editable check-in and check-out dates
-  const [checkIn, setCheckIn] = useState<string>("2023-12-01");
-  const [checkOut, setCheckOut] = useState<string>("2023-12-10");
+  const [checkIn, setCheckIn] = useState<string>("01/01/2025");
+  const [checkOut, setCheckOut] = useState<string>("01/01/2025");
+
+  useEffect(() => {
+    if (rooms.length && roomId) {
+      const foundRoom = rooms.find(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (r: any) => String(r.id) === String(roomId)
+      );
+      if (foundRoom) {
+        setRoom(foundRoom);
+      } else {
+        setError("No room found");
+      }
+    }
+  }, [rooms, roomId]);
+
+  /**
+   * This is the browser title
+   * https://stackoverflow.com/questions/46160461/how-do-you-set-the-document-title-in-react?
+   */
+  // useEffect(() => {
+  //   // document.title = `${t("login")} | MoviesApp`;
+  //   document.title = `Room ${room.name} details | GuestEase`;
+  //   //   }, [t]);
+  // });
+
+  useEffect(() => {
+    if (room) {
+      document.title = `${room.name} details | GuestEase`;
+    }
+  }, [room]);
 
   useEffect(() => {
     if (!roomId) {

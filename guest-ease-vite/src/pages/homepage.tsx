@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   Typography,
@@ -62,6 +62,15 @@ const rooms = [
 ];
 
 const HomePage: React.FC = () => {
+  /**
+   * This is the browser title
+   * https://stackoverflow.com/questions/46160461/how-do-you-set-the-document-title-in-react?
+   */
+  useEffect(() => {
+    // document.title = `${t("login")} | MoviesApp`;
+    document.title = `Welcome to GuestEase | Have a nice stay!`;
+    //   }, [t]);
+  });
   return (
     <>
       <Container maxWidth="md">

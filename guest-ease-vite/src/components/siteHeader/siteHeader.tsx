@@ -377,7 +377,7 @@
  * otherwise, the standard navigation links should render.
  */
 
-import React, { useState, type MouseEvent, useEffect } from "react";
+import React, { useState, type MouseEvent, useEffect, useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -391,6 +391,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { Link, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import LoginIcon from "@mui/icons-material/Login";
+import { AuthContext } from "../../context/authContext";
 // import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 // import LanguageSwitcher from "../languageSwitcher";
 // import UserProfileDrawer from "../UserProfileDrawer";
@@ -400,10 +401,18 @@ const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 const SiteHeader: React.FC = () => {
   const [userName, setUserName] = useState("User");
 
-  useEffect(() => {
-    // You can remove this or set it from somewhere else if needed
-    setUserName("User");
-  }, []);
+  const { token } = useContext(AuthContext) || {};
+  const { user } = useContext(AuthContext) || {};
+
+  useEffect(
+    () => {
+      // You can remove this or set it from somewhere else if needed
+      setUserName(user?.firstName ?? "User");
+    }, // Run this effect every time `token` changes ensuring the 'userFirstName' is up-to-date
+    [token, user]
+  );
+
+  console.log("SiteHeader token:", token);
 
   const navigate = useNavigate();
   const theme = useTheme();
@@ -550,16 +559,21 @@ const SiteHeader: React.FC = () => {
                 Facilities
               </Button>
 
-              <Button sx={{ textTransform: "none" }} color="inherit">
-                Welcome {userName}!
-              </Button>
-              <Button
-                sx={{ textTransform: "none" }}
-                color="inherit"
-                onClick={() => navigate("/login")}
-              >
-                Login <LoginIcon sx={{ ml: 1 }} />
-              </Button>
+              {token ? (
+                <>
+                  <Button sx={{ textTransform: "none" }} color="inherit">
+                    Welcome {userName}!
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  sx={{ textTransform: "none" }}
+                  color="inherit"
+                  onClick={() => navigate("/login")}
+                >
+                  Login <LoginIcon sx={{ ml: 1 }} />
+                </Button>
+              )}
             </>
           )}
         </Toolbar>
