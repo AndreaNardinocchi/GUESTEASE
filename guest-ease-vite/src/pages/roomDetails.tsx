@@ -518,8 +518,10 @@
 // export default RoomDetails;
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
+import { useNavigate, useParams } from "react-router-dom";
 import { useBooking } from "../context/bookingContext";
+
 import {
   Box,
   Card,
@@ -558,9 +560,13 @@ const RoomDetails: React.FC = () => {
   const [rooms, setRooms] = useState<any[]>([]);
   const [guests, setGuests] = useState<number>(1);
 
+  // // Editable check-in and check-out dates
+  // const [checkIn, setCheckIn] = useState<string>("01/01/2025");
+  // const [checkOut, setCheckOut] = useState<string>("01/01/2025");
+
   // Editable check-in and check-out dates
-  const [checkIn, setCheckIn] = useState<string>("01/01/2025");
-  const [checkOut, setCheckOut] = useState<string>("01/01/2025");
+  const [checkIn, setCheckIn] = useState<string>("2025-01-01");
+  const [checkOut, setCheckOut] = useState<string>("2025-01-02");
 
   useEffect(() => {
     if (rooms.length && roomId) {
@@ -626,7 +632,17 @@ const RoomDetails: React.FC = () => {
     }
   }, [rooms, roomId]);
 
+  const { user } = useAuth(); // check if user is logged in
+  const navigate = useNavigate();
+
   const handleBooking = async () => {
+    console.log("Current user:", user);
+    if (!user) {
+      // Not logged in → redirect to login
+      navigate("/login", { state: { from: location.pathname } });
+      return;
+    }
+
     if (guests <= 0) {
       setError("Please select a valid number of guests.");
       return;
@@ -644,6 +660,7 @@ const RoomDetails: React.FC = () => {
 
     const newBooking = {
       room_id: roomId!,
+      user_id: user!.id, // ✅ user.id now exists
       check_in: checkIn,
       check_out: checkOut,
       guests,

@@ -460,6 +460,8 @@ type Booking = {
   check_out: string;
   guests: number;
   created_at?: string;
+  // 🟩 ADDED: user_id field to match Supabase schema
+  user_id?: string;
 };
 
 type BookingContextType = {
@@ -495,6 +497,16 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({
   const fetchBookings = async (roomId?: string) => {
     setLoading(true);
     try {
+      // 🟩 ADDED: Get current authenticated user
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        setBookings([]);
+        setLoading(false);
+        return;
+      }
+      // 🟩 CHANGED: Filter bookings by current user's ID
       let query = supabase.from("bookings").select("*");
       if (roomId) query = query.eq("room_id", roomId);
       const { data, error } = await query;
@@ -530,10 +542,22 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({
   const bookRoom = async (newBooking: Omit<Booking, "id" | "created_at">) => {
     setLoading(true);
     try {
+      // 🟩 ADDED: Get user and attach user_id to booking
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+      if (userError || !user) {
+        return { success: false, message: "User not authenticated." };
+      }
+
+      // 🟩 ADDED: Include user_id when inserting
+      const bookingWithUser = { ...newBooking, user_id: user.id };
       const { data: inserted, error: insertError } = await supabase
         .from("bookings")
-        .insert([newBooking])
+        .insert([bookingWithUser])
         .select();
+      console.log("Booking payload for insert:", bookingWithUser);
 
       if (insertError) {
         if (
@@ -545,7 +569,11 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({
             message: "Selected dates overlap with an existing booking.",
           };
         }
-        console.error("Error inserting booking:", insertError);
+        console.error(
+          "Error inserting booking:",
+          JSON.stringify(insertError, null, 2)
+        );
+
         return { success: false, message: "Failed to create booking." };
       }
 

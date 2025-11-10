@@ -5,6 +5,8 @@ import SearchResults from "./pages/searchResults";
 import RoomDetail from "./pages/roomDetails";
 import AuthContextProvider from "./context/authContext";
 import LoginPage from "./pages/loginPage";
+import SignUpPage from "./pages/signUpPage";
+// import ProtectedRoute from "./routes/protectedRoutes";
 
 const App = () => {
   return (
@@ -16,8 +18,11 @@ const App = () => {
           {/* <Route path="/book" element={<BookingForm />} /> */}
           {/* You can add more pages here later */}
           <Route path="/search-results" element={<SearchResults />} />
+
           <Route path="/room/:roomId" element={<RoomDetail />} />
+
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
         </Routes>
       </AuthContextProvider>
     </>

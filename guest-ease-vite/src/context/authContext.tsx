@@ -29,13 +29,15 @@ const AuthContextProvider: React.FC<React.PropsWithChildren> = (props) => {
    * Declare a state variable `user` with a default value "User"
    * `setUser` is the function used to update this state
    * */
-  const [user, setUser] = useState<User>({
-    firstName: "User",
-    lastName: "User",
-    email: "user@example.com",
-    role: "guest",
-    // role: t("viewer"),
-  });
+  // const [user, setUser] = useState<User>({
+  //   firstName: "User",
+  //   lastName: "User",
+  //   email: "user@example.com",
+  //   role: "guest",
+  //   // role: t("viewer"),
+  // });
+
+  const [user, setUser] = useState<User | null>(null);
 
   const location = useLocation();
   const navigate = useNavigate();
