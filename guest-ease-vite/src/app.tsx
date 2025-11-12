@@ -6,6 +6,10 @@ import RoomDetail from "./pages/roomDetails";
 import AuthContextProvider from "./context/authContext";
 import LoginPage from "./pages/loginPage";
 import SignUpPage from "./pages/signUpPage";
+import AccountPage from "./pages/accountPage";
+import ProfilePage from "./pages/profilePage";
+import FavoritesPage from "./pages/favoritesPage";
+import ProtectedRoute from "./routes/protectedRoutes";
 // import ProtectedRoute from "./routes/protectedRoutes";
 
 const App = () => {
@@ -23,6 +27,31 @@ const App = () => {
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <AccountPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/account/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/account/favorites"
+            element={
+              <ProtectedRoute>
+                <FavoritesPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </AuthContextProvider>
     </>

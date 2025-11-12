@@ -66,7 +66,10 @@ const AuthContextProvider: React.FC<React.PropsWithChildren> = (props) => {
         lastName: user.user_metadata.last_name || "User",
         email: user.user_metadata.email || "user@example.com",
         //  role: user.user_metadata.role || t("viewer"), // or assign "viewer" by default
-        role: user.user_metadata.role || "guest", // or assign "viewer" by default
+        role: user.user_metadata.role || "guest",
+        id: "",
+        createdAt: user.created_at || "time",
+        country: user.user_metadata.country || "country",
       };
 
       // Update the user state in the AuthContext

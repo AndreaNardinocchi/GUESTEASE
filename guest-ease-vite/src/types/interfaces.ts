@@ -5,6 +5,9 @@ export interface User {
   lastName: string;
   email: string;
   role?: string;
+  avatarUrl?: string; // ✅ Added optional avatar support
+  createdAt?: string; // ISO date string or fallback
+  country: string;
 }
 
 // AuthContext Interface

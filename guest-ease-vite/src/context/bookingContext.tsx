@@ -445,7 +445,7 @@
  * - avoids top-level Supabase calls
  */
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { searchAvailableRooms as searchRoomsService } from "../supabase/roomService";
 
@@ -493,23 +493,71 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(false);
 
-  /* Fetch bookings */
-  const fetchBookings = async (roomId?: string) => {
+  // /* Fetch bookings */
+  // const fetchBookings = async (roomId?: string) => {
+  //   setLoading(true);
+  //   try {
+  //     // 🟩 ADDED: Get current authenticated user
+  //     const {
+  //       data: { user },
+  //     } = await supabase.auth.getUser();
+  //     if (!user) {
+  //       setBookings([]);
+  //       setLoading(false);
+  //       return;
+  //     }
+
+  /* ✅ FIXED: Memoize fetchBookings to avoid flickering */
+  // const fetchBookings = useCallback(async (roomId?: string) => {
+  //   setLoading(true);
+  //   try {
+  //     const { data: { user } } = await supabase.auth.getUser();
+  //     if (!user) {
+  //       setBookings([]);
+  //       setLoading(false);
+  //       return;
+  //     }
+
+  //     // 🟩 CHANGED: Filter bookings by current user's ID
+  //     let query = supabase.from("bookings").select("*");
+  //     if (roomId) query = query.eq("room_id", roomId);
+  //     const { data, error } = await query;
+  //     if (error) {
+  //       console.error("fetchBookings error:", error);
+  //       setBookings([]);
+  //     } else {
+  //       setBookings((data as Booking[]) || []);
+  //     }
+  //   } catch (err) {
+  //     console.error("fetchBookings unexpected error:", err);
+  //     setBookings([]);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  //  } , []); // 👈 Empty dependency array keeps it stable across renders
+  // };
+
+  /* ✅ FIXED: Memoize fetchBookings to avoid flickering */
+  const fetchBookings = useCallback(async (roomId?: string) => {
     setLoading(true);
     try {
-      // 🟩 ADDED: Get current authenticated user
       const {
         data: { user },
       } = await supabase.auth.getUser();
+
       if (!user) {
         setBookings([]);
         setLoading(false);
         return;
       }
-      // 🟩 CHANGED: Filter bookings by current user's ID
-      let query = supabase.from("bookings").select("*");
+
+      // ✅ Filter bookings by current user's ID
+      let query = supabase.from("bookings").select("*").eq("user_id", user.id);
+
       if (roomId) query = query.eq("room_id", roomId);
+
       const { data, error } = await query;
+
       if (error) {
         console.error("fetchBookings error:", error);
         setBookings([]);
@@ -522,7 +570,7 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // ✅ stable reference, no flicker
 
   /* Overlap check */
   const bookingsOverlap = (
