@@ -10,6 +10,9 @@ import AccountPage from "./pages/accountPage";
 import ProfilePage from "./pages/profilePage";
 import FavoritesPage from "./pages/favoritesPage";
 import ProtectedRoute from "./routes/protectedRoutes";
+import BookingConfirmation from "./pages/bookingConfirmationPage";
+import AdminDashboard from "./pages/adminDashboard";
+import AdminRoute from "./routes/AdminRoute";
 // import ProtectedRoute from "./routes/protectedRoutes";
 
 const App = () => {
@@ -50,6 +53,22 @@ const App = () => {
               <ProtectedRoute>
                 <FavoritesPage />
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/booking-confirmation"
+            element={
+              <ProtectedRoute>
+                <BookingConfirmation />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
             }
           />
         </Routes>

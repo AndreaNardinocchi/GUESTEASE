@@ -8,6 +8,19 @@ export interface User {
   avatarUrl?: string; // ✅ Added optional avatar support
   createdAt?: string; // ISO date string or fallback
   country: string;
+  zipCode: string;
+}
+
+export interface AppUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  country?: string;
+  zipCode?: string;
+  avatarUrl?: string;
+  role?: string;
+  createdAt?: string;
 }
 
 // AuthContext Interface
