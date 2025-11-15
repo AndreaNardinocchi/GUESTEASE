@@ -363,6 +363,7 @@ const UserProfileDrawer: React.FC<UserProfileDrawerProps> = ({
         avatarUrl: supabaseUser.avatarUrl || "",
         createdAt: supabaseUser.createdAt || "",
         country: supabaseUser.country || "Unknown",
+        zipCode: supabaseUser.zipCode || "",
       }
     : null;
 
@@ -419,13 +420,24 @@ const UserProfileDrawer: React.FC<UserProfileDrawerProps> = ({
             {initials}
           </Avatar>
         )}
-
         <Typography variant="h6" align="center">
           {user.firstName} {user.lastName}
         </Typography>
         <Typography variant="body2" color="text.secondary" align="center">
           {user.email}
         </Typography>
+        {/* FIXED ROLE CHECK */}
+        {auth?.user?.role === "admin" && (
+          <MuiLink
+            component={Link}
+            to="/admin"
+            underline="hover"
+            sx={{ mt: 1, color: "#8E4585", fontWeight: 500 }}
+            onClick={onClose}
+          >
+            View Admin Dashboard
+          </MuiLink>
+        )}
 
         <MuiLink
           component={Link}
@@ -434,7 +446,7 @@ const UserProfileDrawer: React.FC<UserProfileDrawerProps> = ({
           sx={{ mt: 1, color: "#8E4585", fontWeight: 500 }}
           onClick={onClose}
         >
-          View Account
+          View Account as a guest
         </MuiLink>
       </Box>
 
